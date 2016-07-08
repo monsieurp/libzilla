@@ -1,0 +1,2 @@
+class LibZillaException(BaseException):
+    pass
