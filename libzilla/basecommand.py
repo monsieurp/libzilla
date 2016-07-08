@@ -4,12 +4,13 @@ from docopt import docopt
 """The BaseCommand class is an entry point into the `lzilla' command which
 dispatches keywords to sub commands."""
 
+VERSION='1.0'
 
 class BaseCommand:
     """lzilla is a tool for managing Bugzilla bug reports.
 
 All communications are carried out using
-Bugzilla REST API over the HTTPS scheme.
+the Bugzilla REST API over the HTTPS scheme.
 
 Usage:
   lzilla [-h|--help] <command> [<args>...]
@@ -26,7 +27,7 @@ Options:
     def __init__(self):
         args = docopt(
             BaseCommand.__doc__,
-            version='0.1',
+            version=VERSION,
             help=True,
             options_first=True
         )
