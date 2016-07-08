@@ -11,7 +11,7 @@ Features
 
 * **Easy to use**: only requires a shell.
 * **Scriptable**: can be used in conjunction with other scripts.
-* **Not a lot of deps**: sole dependency is docopt.
+* **Not a lot of deps**: built with docopt and requests.
 * **Pythonic**: because we're worth it.
 
 Install
