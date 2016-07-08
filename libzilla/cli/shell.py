@@ -148,7 +148,7 @@ resolution and summary."""
               .format(self.current_br.bug_number))
 
     def do_EOF(self, line):
-        """Shut down shell by pressing ^D."""
+        """Quit shell by pressing ^D."""
         print('Bye!')
         return -1
 
