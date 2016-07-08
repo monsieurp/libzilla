@@ -1,5 +1,7 @@
 from string import Template
 
+"""The RESTURLMaker class helps build URLs for the Bugzilla REST API."""
+
 
 class RESTURLMaker:
     def __init__(self, url=''):
@@ -14,7 +16,6 @@ class RESTURLMaker:
         )
 
     def make_bug_url(self, token=True, bug_number=''):
-        t = ''
         if token:
             t = Template('$url/bug?token=$token&id=$bug_number').substitute(
                 url=self.url,

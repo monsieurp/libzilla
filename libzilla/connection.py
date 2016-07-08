@@ -11,6 +11,8 @@ logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
+"""The Connection class is in charge of talking to the Bugzilla REST API."""
+
 
 class Connection:
     def __init__(self, debug=None):

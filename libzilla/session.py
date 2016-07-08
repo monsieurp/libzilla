@@ -43,9 +43,11 @@ class LibzillaSession:
         self.conn = None
 
     def connect(self):
-        if not self.conn:
-            self.conn = Connection()
+        if not self.conn: self.conn = Connection()
         self.conn.login()
+
+    def get_bug_info(self, bug_number):
+        return self.conn.get_bug_info(bug_number)
 
     def update_bugs(self):
         return self.conn.update_bugs(self.bugs)
@@ -113,9 +115,6 @@ class LibzillaSession:
 
         if not all(all_fcnts):
             sys.exit(1)
-
-    def get_bug_info(self, bug_number):
-        return self.conn.get_bug_info(bug_number)
 
     def process_bug_numbers(self, bugs=None):
         if bugs:

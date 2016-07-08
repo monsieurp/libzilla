@@ -1,6 +1,6 @@
-from libzilla.exceptions import LibZillaException
 from libzilla.promptmaker import prompt_for_credentials
 from libzilla.promptmaker import prompt
+from libzilla.exceptions import LibZillaException
 from configparser import ConfigParser
 
 import libzilla.validator as validator
@@ -16,6 +16,9 @@ KEYS_IN_RCFILE = 'url username password'.split()
 logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
+
+"""The ConfigManager class reads and also helps create a ~/.libzillarc file to
+find out the user's credentials in order to log into Bugzilla."""
 
 
 class ConfigManager(ConfigParser):

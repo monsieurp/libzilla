@@ -4,7 +4,7 @@ from libzilla.session import STATUSES
 import sys
 import cmd
 
-""" This module defines the ShellCommand class. """
+"""This module defines the ShellCommand class."""
 
 INTRO = """Welcome to the Libzilla Shell!
 

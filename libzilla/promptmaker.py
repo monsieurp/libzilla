@@ -8,6 +8,8 @@ logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
+"""This module helps create prompts when asking user for information."""
+
 
 def prompt(prompt_msg):
     while True:

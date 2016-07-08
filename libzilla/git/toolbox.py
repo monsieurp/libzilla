@@ -1,15 +1,10 @@
 import subprocess
 import re
 
+"""A set of useful functions when dealing with git."""
 
-def look_for_bug_numbers(line):
-    candidates = (
-        r'^.*?Fixes bug (\d+).*?$',
-        r'^.*?Fixes security bug (\d+).*?$',
-        r'^\s+Gentoo-Bug:(\s+\d+)$',
-        r'^\s+Gentoo-Bug:\s?https://bugs.gentoo.org/(\d+)'
-    )
 
+def look_for_bug_numbers(line, candidates):
     for candidate in candidates:
         match = re.search(candidate, line)
         if match:

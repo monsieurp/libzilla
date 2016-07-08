@@ -1,7 +1,7 @@
 from libzilla.git.session import GitSession
 from libzilla.session import LibzillaSession
 
-""" This modules defines the GitCommand class. """
+"""This modules defines the GitCommand class."""
 
 
 class GitCommand:

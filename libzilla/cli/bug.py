@@ -1,6 +1,9 @@
 from libzilla.session import LibzillaSession
 
-""" This modules defines the BugCommand class. """
+"""This modules defines the BugCommand class.
+
+The BugCommand class is the entry point into the `lzilla bug' command which
+helps manage bug from the CLI on the fly."""
 
 
 class BugCommand:

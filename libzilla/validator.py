@@ -6,6 +6,7 @@ logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
+"""This module contains a sole class for validating an URL."""
 
 def validate_url(url):
     if not url:
