@@ -69,7 +69,7 @@ Examples:
         if comment:
             print('Comment was: {0}'.format(comment))
         else:
-            print('There was no comment.')
+            print('There was no comment set.')
         self.current_br.info['--comment'] = line
         print('Comment is now: {0}'.format(line))
 
@@ -84,7 +84,7 @@ Examples:
         if status:
             print('STATUS was: {0}'.format(status))
         else:
-            print('There was no STATUS.')
+            print('There was no STATUS set.')
         self.current_br.info['--status'] = line
         print('STATUS is now: {0}'.format(line))
 
@@ -113,7 +113,7 @@ Examples:
         if resolution:
             print('RESOLUTION was: {0}'.format(resolution))
         else:
-            print('There was no RESOLUTION.')
+            print('There was no RESOLUTION set.')
         self.current_br.info['--resolution'] = line
         print('RESOLUTION is now: {0}'.format(line))
 
@@ -138,13 +138,13 @@ resolution and summary."""
     def do_next(self, line):
         """Switch to next bug report in the stack."""
         self.current_br = self.current_br.nexx
-        print('Switched to next bug report: {0}'
+        print('Switch to next bug report: {0}'
               .format(self.current_br.bug_number))
 
     def do_previous(self, line):
         """Switch to previous bug report in the stack."""
         self.current_br = self.current_br.previous
-        print('Switched to previous bug report: {0}'
+        print('Switch to previous bug report: {0}'
               .format(self.current_br.bug_number))
 
     def do_EOF(self, line):
