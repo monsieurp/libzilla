@@ -1,4 +1,4 @@
-from libzilla import Connection
+from libzilla.connection import Connection
 import logging
 import sys
 
