@@ -116,7 +116,7 @@ class Connection:
             status = update.get('status')
 
             if not status and not resolution and not comment:
-                logger.info('Nothing to update for bug {0}.'.format(bug_number))
+                logger.info('Nothing to update for bug #{0}.'.format(bug_number))
                 break
 
             payload = {
