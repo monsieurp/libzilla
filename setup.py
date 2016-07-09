@@ -1,5 +1,4 @@
-# Always prefer setuptools over distutils
-from setuptools import setup
+from setuptools import setup, find_packages
 from libzilla.basecommand import VERSION
 
 # To use a consistent encoding
@@ -27,7 +26,7 @@ setup(
     url='https://github.com/monsieurp/libzilla',
 
     # Author details
-    author='Paitrce Clement',
+    author='Patrice Clement',
     author_email='monsieurp@gentoo.org',
 
     # Choose your license
@@ -62,7 +61,7 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     # packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    packages=['libzilla'],
+    packages=find_packages(),
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment
     # this:
