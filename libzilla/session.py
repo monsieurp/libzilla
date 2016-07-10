@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
-""" This module defines the LibzillaSession class. """
+"""This module defines the LibzillaSession class."""
 
 ERROR_MESSAGES = {
     'bug_number': 'Error! Bug \"{0}\" in an invalid bug number!',
@@ -106,14 +106,14 @@ class LibzillaSession:
         return True
 
     def check_for_args(self):
-        all_fcnts = (
+        all_functs = (
             self.check_for_bug_numbers(),
             self.check_for_options(),
             self.check_for_resolution(),
             self.check_for_status()
         )
 
-        if not all(all_fcnts):
+        if not all(all_functs):
             sys.exit(1)
 
     def process_bug_numbers(self, bugs=None):
