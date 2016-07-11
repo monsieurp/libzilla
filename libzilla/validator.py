@@ -14,11 +14,11 @@ def validate_url(url):
 
     outurl = urlparse(url)
     scheme, base, path = outurl[0:3]
+    if not scheme and not base and path:
+        base = path
+        path = ''
 
-    if not scheme.startswith('http'):
-        raise LibZillaException('URL scheme must be HTTP!')
-
-    if not scheme.startswith('https'):
+    if not scheme or not scheme.startswith('https'):
         logger.info("HTTPS scheme not detected!")
         logger.info("Defaulting scheme to 'https'.")
         scheme = 'https'
@@ -28,7 +28,7 @@ def validate_url(url):
         logger.info("Defaulting path to 'rest'.")
         path = '/rest'
 
-    if not scheme or not base or not path:
+    if not base or not path:
         raise LibZillaException('Malformed URL! \"{0}\"'.format(url))
 
     valid_url = '%s://%s%s' % (scheme, base, path)
