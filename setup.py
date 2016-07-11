@@ -5,27 +5,32 @@ from libzilla.basecommand import VERSION
 from codecs import open
 from os import path
 
+# Name of current file.
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+# Call setup from setuptools and
+# set function calls.
 setup(
+    # Name of this project.
     name='libzilla',
+
+    # Description of this project.
+    description='Libzilla Python library',
+    long_description=long_description,
 
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
     version=VERSION,
 
-    description='Libzilla Python library',
-    long_description=long_description,
-
-    # The project's main homepage.
+    # Project's main homepage.
     url='https://github.com/monsieurp/libzilla',
 
-    # Author details
+    # Author's details
     author='Patrice Clement',
     author_email='monsieurp@gentoo.org',
 
