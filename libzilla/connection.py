@@ -31,8 +31,7 @@ class Connection:
         )
 
     def send_request(self, request_type='', url=None, payload=None):
-        if payload:
-            payload = json.dumps(payload)
+        if payload: payload = json.dumps(payload)
 
         http_request = {
             'headers': {
@@ -55,13 +54,13 @@ class Connection:
         return response
 
     def login(self):
-        if self.connected:
-            return self.connected
+        if self.connected: return self.connected
 
         url = self.resturlmaker.make_login_url(
             username=self.rcfile['username'],
             password=self.rcfile['password']
         )
+
         logger.info('Logging in ...')
         response = self.send_request('GET', url)
         self.token = response.json()['token']
@@ -79,7 +78,7 @@ class Connection:
 
         response = self.send_request('GET', url)
         if len(response.json()['bugs']) == 0:
-            raise LibZillaException('Bug \"{0}\" does not exist in the Bugzilla DB!'.format(bug_number))
+            raise LibZillaException('Bug #{0} does not exist in the Bugzilla DB!'.format(bug_number))
         response = response.json()['bugs'][0]
 
         logger.info('More info about this bug: https://bugs.gentoo.org/{0}.'
@@ -91,15 +90,12 @@ class Connection:
             'status': response['status']
         })
 
-        if info['resolution'] == '':
-            info['resolution'] = 'NONE'
+        if info['resolution'] == '': info['resolution'] = 'NONE'
 
         for key, value in info.items():
             key = str(key)
-            if key == 'summary':
-                key = key.capitalize()
-            else:
-                key = key.upper()
+            if key == 'summary': key = key.capitalize()
+            else: key = key.upper()
             logger.info('{0}: {1}'.format(key, value))
 
         return info
@@ -122,9 +118,7 @@ class Connection:
             payload = {
                 'ids': bug_number,
                 'token': self.token,
-                'comment': {
-                    'body': comment
-                }
+                'comment': {'body': comment}
             }
 
             if status and status != '':
@@ -136,9 +130,10 @@ class Connection:
                 logger.info('Setting RESOLUTION to {0} ...'.format(resolution))
 
             if comment != '':
-                logger.info('Posting comment to bug {0} ...'.format(bug_number))
+                logger.info('Posting comment to bug #{0} ...'.format(bug_number))
 
             response = self.send_request('PUT', url, payload)
+
             if not response.ok:
                 raise LibZillaException('An error occured whilst updating {0}: \"{1}\"'.format(
                     bug_number,
