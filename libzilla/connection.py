@@ -77,8 +77,10 @@ class Connection:
         logger.info('Querying Bugzilla for bug #{0} ...'.format(bug_number))
 
         response = self.send_request('GET', url)
+
         if len(response.json()['bugs']) == 0:
             raise LibZillaException('Bug #{0} does not exist in the Bugzilla DB!'.format(bug_number))
+
         response = response.json()['bugs'][0]
 
         logger.info('More info about this bug: https://bugs.gentoo.org/{0}.'
@@ -103,8 +105,7 @@ class Connection:
     def update_bugs(self, updates):
         for bug_number, update in updates.items():
             url = self.resturlmaker.make_bug_url(
-                bug_number=bug_number,
-                token=False
+                bug_number=bug_number
             )
 
             resolution = update.get('resolution')

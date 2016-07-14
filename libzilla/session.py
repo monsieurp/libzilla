@@ -52,22 +52,6 @@ class LibzillaSession:
     def update_bugs(self):
         return self.conn.update_bugs(self.bugs)
 
-    def check_for_bug_numbers(self, args=None):
-        if args:
-            my_args = args
-        else:
-            my_args = self.args
-
-        bug_numbers = my_args['<bug_number>']
-        for bug in bug_numbers:
-            try:
-                bug = int(bug)
-            except ValueError:
-                print(ERROR_MESSAGES['bug_number']
-                      .format(bug))
-                return False
-        return True
-
     def check_for_options(self, args=None):
         if args:
             my_args = args
@@ -107,9 +91,8 @@ class LibzillaSession:
 
     def check_for_args(self):
         all_functs = (
-            self.check_for_bug_numbers(),
-            self.check_for_options(),
             self.check_for_resolution(),
+            self.check_for_options(),
             self.check_for_status()
         )
 

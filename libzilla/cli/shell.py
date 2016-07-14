@@ -31,7 +31,6 @@ Examples:
         cmd.Cmd.__init__(self)
         self.args = args
         self.session = LibzillaSession(args)
-        self.check_for_bug_numbers()
 
         args['<bug_number>'] = set(args['<bug_number>'])
         list_of_br = ', '.join(args['<bug_number>'])
@@ -55,10 +54,6 @@ Examples:
         first.previous = last
         self.current_br = first
         return first_br
-
-    def check_for_bug_numbers(self):
-        if not self.session.check_for_bug_numbers(self.args):
-            sys.exit(1)
 
     def do_comment(self, line):
         """Add comment to current bug report."""

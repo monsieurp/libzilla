@@ -15,17 +15,8 @@ class RESTURLMaker:
             password=password
         )
 
-    def make_bug_url(self, token=True, bug_number=''):
-        if token:
-            t = Template('$url/bug?token=$token&id=$bug_number').substitute(
-                url=self.url,
-                token=self.token,
-                bug_number=bug_number
-            )
-        else:
-            t = Template('$url/bug/$bug_number').substitute(
-                url=self.url,
-                bug_number=bug_number
-            )
-
-        return t
+    def make_bug_url(self, bug_number=''):
+        return Template('$url/bug/$bug_number').substitute(
+            url=self.url,
+            bug_number=bug_number
+        )
