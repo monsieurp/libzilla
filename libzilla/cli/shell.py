@@ -172,7 +172,11 @@ class BugReport:
     def __str__(self):
         my_str = 'Bug #: %s' % (self.bug_number)
         for key, val in self.info.items():
-            my_str = '{0}\n{1}: {2}'.format(
-                my_str, key.replace('--', ''), val
+            key = key.replace('--', '')
+            if key == 'comment': key = key.capitalize()
+            else: key = key.upper()
+            print(key)
+            my_str = '{0}\n[{1}: {2}]'.format(
+                my_str, key, val
             )
         return my_str
