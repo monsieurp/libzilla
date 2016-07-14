@@ -8,10 +8,13 @@ logging.basicConfig(level=logging.INFO,
                     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
-"""This module helps create prompts when asking user for information."""
+"""This module helps create prompts for asking user for information."""
 
 
 def prompt(prompt_msg):
+    """Create a prompt using prompt_msg.
+    :param prompt_msg: Message to display to user.
+    """
     while True:
         try:
             answer = input(prompt_msg)
@@ -26,6 +29,9 @@ def prompt(prompt_msg):
 
 
 def prompt_for_credentials(credentials):
+    """Create a prompt to ask user for credentials.
+    :param credentials: a dictionary to store credentials into.
+    """
     while True:
         credentials['url'] = prompt('Bugzilla URL: ')
         credentials['username'] = prompt('Username: ')
