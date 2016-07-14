@@ -30,13 +30,20 @@ def prompt_for_credentials(credentials):
         credentials['url'] = prompt('Bugzilla URL: ')
         credentials['username'] = prompt('Username: ')
         credentials['password'] = getpass.getpass()
-        print("Let's recap:")
+        print("OK! Let's recap:")
         for item in credentials.keys():
             if item == 'url':
                 itm = item.upper()
             else:
                 itm = item.capitalize()
-            print('{0}: {1}'.format(itm, credentials[item]))
+
+            if item != 'password':
+                to_print = '{0}: {1}'.format(itm, credentials[item])
+            else:
+                # Don't echo back password
+                to_print = '{0}: {1}'.format(itm, '*' * len(str(credentials[item])))
+            print(to_print)
+
         if prompt('Are these settings correct? [y/n] ') == 'y':
             credentials['url'] = validator.validate_url(credentials['url'])
             break
