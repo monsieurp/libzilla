@@ -36,7 +36,7 @@ def prompt_for_credentials(credentials):
         credentials['url'] = prompt('Bugzilla URL: ')
         credentials['username'] = prompt('Username: ')
         credentials['password'] = getpass.getpass()
-        print("OK! Let's recap:")
+        print("OK! Let's recap.")
         for item in credentials.keys():
             if item == 'url':
                 itm = item.upper()
