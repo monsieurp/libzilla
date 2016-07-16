@@ -2,13 +2,15 @@ import collections
 import requests
 import logging
 import json
+import sys
+import re
 
-from libzilla.exceptions import LibZillaException
-from libzilla.resturlmaker import RESTURLMaker
 from libzilla.configmanager import ConfigManager
+from libzilla.resturlmaker import RESTURLMaker
 
-logging.basicConfig(level=logging.INFO,
-                    format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
 """The Connection class is in charge of talking to the Bugzilla REST API."""
@@ -18,7 +20,8 @@ class Connection:
     def __init__(self, debug=None):
         self.connected = False
         self.debug = debug
-        self.rcfile = ConfigManager().obtain_credentials()
+        self.configmanager = ConfigManager()
+        self.rcfile = self.configmanager.obtain_credentials()
         self.resturlmaker = RESTURLMaker(url=self.rcfile['url'])
 
     def __str__(self):
@@ -29,6 +32,32 @@ class Connection:
             self.connected,
             self.token
         )
+
+    def login(self):
+        if self.connected: return self.connected
+
+        url = self.resturlmaker.make_login_url(
+            username=self.rcfile['username'],
+            password=self.rcfile['password']
+        )
+
+        logger.info('Logging in ...')
+        response = self.send_request('GET', url)
+
+        try:
+            self.token = response.json()['token']
+        except KeyError:
+            logger.error('Login failed! Please check your credentials!')
+            sys.exit(1)
+
+        self.token = response.json()['token']
+        self.resturlmaker.token = self.token
+        self.connected = True
+        logger.info('Logged in!')
+
+        self.configmanager.save_rcfile()
+
+        return self.connected
 
     def send_request(self, request_type='', url=None, payload=None):
         if payload: payload = json.dumps(payload)
@@ -46,28 +75,14 @@ class Connection:
         elif request_type == 'PUT':
             response = requests.put(**http_request)
         else:
-            raise LibZillaException('You must specify a request type!')
+            logger.error('You must specify a request type!')
+            sys.exit(1)
 
         if response.status_code != 200:
-            raise LibZillaException(response.reason)
+            logger.error('Bad request sent to server! HTTP code returned: {0}'
+                         .format(response.status_code))
 
         return response
-
-    def login(self):
-        if self.connected: return self.connected
-
-        url = self.resturlmaker.make_login_url(
-            username=self.rcfile['username'],
-            password=self.rcfile['password']
-        )
-
-        logger.info('Logging in ...')
-        response = self.send_request('GET', url)
-        self.token = response.json()['token']
-        self.resturlmaker.token = self.token
-        self.connected = True
-        logger.info('Logged in!')
-        return self.connected
 
     def get_bug_info(self, bug_number):
         url = self.resturlmaker.make_bug_url(
@@ -75,16 +90,25 @@ class Connection:
         )
 
         logger.info('Querying Bugzilla for bug #{0} ...'.format(bug_number))
-
         response = self.send_request('GET', url)
 
-        if len(response.json()['bugs']) == 0:
-            raise LibZillaException('Bug #{0} does not exist in the Bugzilla DB!'.format(bug_number))
+        try:
+            response = response.json()['bugs'][0]
+        except KeyError:
+            logger.error('Bug #{0} does not exist in the Bugzilla DB! Terminating program.'.
+                         format(bug_number))
+            sys.exit(1)
 
-        response = response.json()['bugs'][0]
+        if re.search(r'[a-zA-Z]+', bug_number):
+            fmt = 'More info about this bug: \
+https://bugs.gentoo.org/show_bug.cgi?id={0}' \
+                   .format(bug_number)
+        else:
+            fmt = 'More info about this bug: \
+https://bugs.gentoo.org/{0}' \
+                   .format(bug_number)
 
-        logger.info('More info about this bug: https://bugs.gentoo.org/{0}.'
-                    .format(bug_number))
+        logger.info(fmt)
 
         info = collections.OrderedDict({
             'resolution': response['resolution'],
@@ -136,12 +160,10 @@ class Connection:
             response = self.send_request('PUT', url, payload)
 
             if not response.ok:
-                raise LibZillaException('An error occured whilst updating {0}: \"{1}\"'.format(
-                    bug_number,
-                    response.ok
-                    )
-                )
+                logger.error('An error occured whilst updating bug #{0}'
+                             .format(bug_number))
+                logger.error('The HTTP server returned the following error: {0}'
+                             .format(response.reason))
+                sys.exit(1)
 
             logger.info('OK!')
-
-        return True

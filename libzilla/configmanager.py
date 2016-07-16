@@ -1,6 +1,5 @@
 from libzilla.promptmaker import prompt_for_credentials
 from libzilla.promptmaker import prompt
-from libzilla.exceptions import LibZillaException
 from configparser import ConfigParser
 
 import libzilla.validator as validator
@@ -13,12 +12,13 @@ DEFAULT_TOKENFILE = os.path.expanduser('~/.libzillatoken')
 DEFAULT_SECTION = 'gentoo'
 KEYS_IN_RCFILE = 'url username password'.split()
 
-logging.basicConfig(level=logging.INFO,
-                    format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
-"""The ConfigManager class reads and also helps create a ~/.libzillarc file to
-find out the user's credentials in order to log into Bugzilla."""
+"""The ConfigManager class reads and helps create a ~/.libzillarc file to
+figure out the user's credentials in order to log into Bugzilla."""
 
 
 class ConfigManager(ConfigParser):
@@ -36,13 +36,10 @@ class ConfigManager(ConfigParser):
 
     def obtain_credentials(self):
         if not os.path.exists(DEFAULT_RCFILE):
-            logger.info('File \"{0}\" not found! Prompt user for credentials.'.format(DEFAULT_RCFILE))
+            logger.info('File \"{0}\" not found! Prompt user for credentials.'
+                        .format(DEFAULT_RCFILE))
             credentials = collections.OrderedDict()
             self.rcfile = prompt_for_credentials(credentials)
-            if prompt('Would you like to record these settings in {0}? [y/n] '.format(DEFAULT_RCFILE)) == 'y':
-                self.save_rcfile()
-            else:
-                logger.info('Keeping settings in memory for the remaining of the session.')
         else:
             logger.info('File \"{0}\" found!'.format(DEFAULT_RCFILE))
             self.walk_rcfile()
@@ -50,6 +47,13 @@ class ConfigManager(ConfigParser):
         return self.rcfile
 
     def save_rcfile(self):
+        if os.path.exists(DEFAULT_RCFILE): return
+
+        if prompt('Would you like to record these settings in {0}? [y/n] '
+                  .format(DEFAULT_RCFILE)) != 'y':
+            logger.info('Keeping settings in memory for the remaining of the session.')
+            return
+
         logger.info('Storing settings in \"{0}\" ...'.format(DEFAULT_RCFILE))
         for item in self.rcfile:
             self.set(DEFAULT_SECTION, item, self.rcfile[item])
@@ -69,6 +73,9 @@ class ConfigManager(ConfigParser):
             for key in KEYS_IN_RCFILE:
                 self.rcfile[key]
         except KeyError as e:
-            raise LibZillaException('Missing key in .libzillarc: \"{0}\" not found'.format(e))
+            import sys
+            logger.error('Missing key in .libzillarc: \"{0}\" not found'.
+                         format(e))
+            sys.exit(1)
 
         self.rcfile['url'] = validator.validate_url(self.rcfile['url'])

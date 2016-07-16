@@ -1,4 +1,3 @@
-from libzilla.exceptions import LibZillaException
 from urllib.parse import urlparse
 import logging
 
@@ -16,7 +15,9 @@ def validate_url(url):
     url: URL to validate."""
 
     if not url:
-        raise LibZillaException('URL is empty!')
+        import sys
+        logger.error('The URL provided is empty!')
+        sys.exit(1)
 
     outurl = urlparse(url)
     scheme, base, path = outurl[0:3]
