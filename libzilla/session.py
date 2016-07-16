@@ -48,41 +48,42 @@ class LibzillaSession:
         return self.conn.update_bugs(self.bugs)
 
     def check_for_options(self, args=None):
+        my_args = self.args
         if args:
             my_args = args
-        else:
-            my_args = self.args
 
         resolution = my_args['--resolution']
         status = my_args['--status']
+        retval = True
         if (resolution and not status) or \
            (not resolution and status):
             print(ERROR_MESSAGES['options'])
-            return False
-        return True
+            retval = False
+        return retval
 
     def check_for_resolution(self, res=None):
+        resolution = self.args['--resolution']
         if res:
             resolution = res
-        else:
-            resolution = self.args['--resolution']
 
+        retval = True
         if resolution and resolution not in RESOLUTIONS:
             print(ERROR_MESSAGES['resolution']
                   .format(resolution, RESOLUTIONS))
-            return False
-        return True
+            retval = False
+        return retval
 
     def check_for_status(self, st=None):
+        status = self.args['--status']
         if st:
             status = st
-        else:
-            status = self.args['--status']
+
+        retval = True
         if status and status not in STATUSES:
             print(ERROR_MESSAGES['status']
                   .format(status, STATUSES))
-            return False
-        return True
+            retval False
+        return retval
 
     def check_for_args(self):
         all_functs = (
@@ -95,10 +96,9 @@ class LibzillaSession:
             sys.exit(1)
 
     def process_bug_numbers(self, bugs=None):
+        my_args = self.args
         if bugs:
             my_args = bugs
-        else:
-            my_args = self.args
 
         bug_numbers = my_args['<bug_number>']
         for bug_number in bug_numbers:
