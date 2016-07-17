@@ -22,12 +22,13 @@ Install
 Usage
 -----
 
-To get you started, simply type ``lzilla --help``. The ``lzilla`` script is made up of three subcommands:
+To get you started, simply type ``lzilla --help``. The ``lzilla`` script is
+made up of a bunch of subcommands:
 
-- ``$ lzilla bug`` to deal with bug reports from the CLI
-- ``$ lzilla shell`` to deal with bug reports within a special shell
-- ``$ lzilla git`` to parse git commit messages for bug reports and figure out what
-  to do with them
+- ``$ lzilla stable`` to read an ebuild and file a stabilisation request on the fly
+- ``$ lzilla shell`` to deal with one or more bug numbers within a special shell
+- ``$ lzilla git`` to parse the last git commit message for one or more bug numbers
+- ``$ lzilla bug`` to deal with one or more bug numbers from the CLI
 
 License
 -------
