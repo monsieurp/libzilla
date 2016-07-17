@@ -120,11 +120,12 @@ https://bugs.gentoo.org/{0}' \
 
         if bug.resolution == '': bug.resolution = 'NONE'
 
-        #for key, value in info.items():
-        #    key = str(key)
-        #    if key == 'summary': key = key.capitalize()
-        #    else: key = key.upper()
-        #    logger.info('{0}: {1}'.format(key, value))
+        for key, value in bug.__dict__.items():
+            key = str(key)
+            if key == 'bug_number': key = 'Bug #'
+            if key in ('resolution', 'status'): key = key.upper()
+            else: key = key.capitalize()
+            logger.info('{0}: {1}'.format(key, value))
 
         return bug
 
