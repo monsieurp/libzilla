@@ -17,6 +17,7 @@ Usage:
   lzilla [-h|--help] <command> [<args>...]
 
 Commands:
+  lzilla stable
   lzilla shell
   lzilla bug
   lzilla git
@@ -34,9 +35,10 @@ Options:
         )
 
         runner = {
-            'shell': self.run_shell_command,
-            'bug':   self.run_bug_command,
-            'git':   self.run_git_command
+            'stable': self.run_stable_command,
+            'shell':  self.run_shell_command,
+            'bug':    self.run_bug_command,
+            'git':    self.run_git_command
         }
 
         try:
@@ -52,6 +54,10 @@ Options:
     def run_git_command(self):
         from libzilla.cli.git import GitCommand
         GitCommand(docopt(GitCommand.__doc__))
+
+    def run_stable_command(self):
+        from libzilla.cli.stable import StableCommand
+        StableCommand(docopt(StableCommand.__doc__))
 
     def run_shell_command(self):
         from libzilla.cli.shell import ShellCommand
