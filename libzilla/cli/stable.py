@@ -18,6 +18,8 @@ ERROR_MESSAGES = {
 class StableCommand:
     """lzilla stable: File a stabilisation request.
 
+WARNING! This is a Gentoo-specific command.
+
 Usage:
   lzilla stable <ebuild>
 
