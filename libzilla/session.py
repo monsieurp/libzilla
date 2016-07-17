@@ -1,7 +1,7 @@
 from libzilla.connection import Connection
 import sys
 
-"""This module defines the LibzillaSession class."""
+"""This module defines the Session class."""
 
 ERROR_MESSAGES = {
     'bug_number': 'Error! Bug \"{0}\" in an invalid bug number!',
@@ -31,7 +31,7 @@ STATUSES = [
 ]
 
 
-class LibzillaSession:
+class Session:
     def __init__(self, args):
         self.args = args
         self.bugs = {}

@@ -1,4 +1,4 @@
-from libzilla.session import LibzillaSession
+from libzilla.session import Session
 from libzilla.session import RESOLUTIONS
 from libzilla.session import STATUSES
 import sys
@@ -30,7 +30,7 @@ Examples:
     def __init__(self, args):
         cmd.Cmd.__init__(self)
         self.args = args
-        self.session = LibzillaSession(args)
+        self.session = Session(args)
 
         args['<bug_number>'] = set(args['<bug_number>'])
         list_of_br = ', '.join(args['<bug_number>'])

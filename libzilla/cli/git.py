@@ -1,5 +1,5 @@
 from libzilla.git.session import GitSession
-from libzilla.session import LibzillaSession
+from libzilla.session import Session
 
 """This modules defines the GitCommand class."""
 
@@ -43,7 +43,7 @@ Examples:
         args['<bug_number>'] = gitsession.commit_info['bugs_to_close']
         args['--comment'] = comment
 
-        session = LibzillaSession(args)
+        session = Session(args)
         session.check_for_args()
         session.connect()
         session.process_bug_numbers()

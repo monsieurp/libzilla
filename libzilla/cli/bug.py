@@ -1,4 +1,4 @@
-from libzilla.session import LibzillaSession
+from libzilla.session import Session
 
 """This modules defines the BugCommand class.
 
@@ -25,7 +25,7 @@ Examples:
 
     def __init__(self, args):
         args['<bug_number>'] = set(args['<bug_number>'])
-        session = LibzillaSession(args)
+        session = Session(args)
         session.check_for_args()
         session.connect()
         session.process_bug_numbers()
