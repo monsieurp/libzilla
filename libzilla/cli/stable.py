@@ -6,7 +6,7 @@ import os
 """This modules defines the StableCommand class.
 
 The StableCommand class is the entry point into the `lzilla stable' command
-which helps file stabilisation request from the CLI."""
+which helps file stabilisation requests from the CLI."""
 
 ERROR_MESSAGES = {
     'file_not_found': 'Error! File \"{0}\" does not exist!',
