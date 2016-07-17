@@ -1,13 +1,12 @@
-#from libzilla.session import LibzillaSession
 from portage.xml.metadata import MetaDataXML
 import portage
 import sys
 import os
 
-"""This modules defines the BugCommand class.
+"""This modules defines the StableCommand class.
 
-The BugCommand class is the entry point into the `lzilla bug' command which
-helps manage bug from the CLI on the fly."""
+The StableCommand class is the entry point into the `lzilla stable' command
+which helps file stabilisation request from the CLI."""
 
 ERROR_MESSAGES = {
     'file_not_found': 'Error! File \"{0}\" does not exist!',
@@ -93,8 +92,3 @@ Examples:
     def file_stabilisation_request(self):
         print('Maintainers: ' + str(self.maintainers))
         print('Arches: ' + str(self.arches))
-
-        #session.check_for_args()
-        #session.connect()
-        #session.process_bug_numbers()
-        #session.update_bugs()
