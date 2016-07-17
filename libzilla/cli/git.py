@@ -1,7 +1,8 @@
-from libzilla.git.session import GitSession
-from libzilla.session import Session
-
 """This modules defines the GitCommand class."""
+
+from libzilla.git.session import GitSession
+from libzilla.connection import Connection
+from libzilla.bug import Bug
 
 
 class GitCommand:
@@ -40,11 +41,27 @@ Examples:
             import sys
             sys.exit('Error! No bug found in last commit!')
 
-        args['<bug_number>'] = gitsession.commit_info['bugs_to_close']
-        args['--comment'] = comment
+        attrs = {
+            'resolution': args['--resolution'],
+            'status': args['--status'],
+            'comment': comment
+        }
 
-        session = Session(args)
-        session.check_for_args()
-        session.connect()
-        session.process_bug_numbers()
-        session.update_bugs()
+        bugs = gitsession.commit_info['bugs_to_close']
+        conn = Connection()
+        conn.login()
+        list_of_bugs = []
+
+        for bug_number in bugs:
+            bug = conn.get_bug_info(bug_number)
+            list_of_bugs.append(Bug(
+                bug_number=bug.bug_number,
+                comment=comment,
+                resolution=args['--resolution'],
+                status=args['--status']
+            ))
+
+        for attr, value in attrs.items():
+            Bug.set_bug_attr(attr, value, list_of_bugs)
+
+        conn.update_bugs(list_of_bugs)

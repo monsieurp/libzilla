@@ -1,4 +1,3 @@
-import collections
 import requests
 import logging
 import json
@@ -7,6 +6,8 @@ import re
 
 from libzilla.configmanager import ConfigManager
 from libzilla.resturlmaker import RESTURLMaker
+
+from libzilla.bug import Bug
 
 logging.basicConfig(
     level=logging.INFO,
@@ -95,49 +96,53 @@ class Connection:
         try:
             response = response.json()['bugs'][0]
         except KeyError:
-            logger.error('Bug #{0} does not exist in the Bugzilla DB! Terminating program.'.
-                         format(bug_number))
+            logger.error('Bug #{0} does not exist in the Bugzilla DB!'
+                         .format(bug_number))
             sys.exit(1)
 
         if re.search(r'[a-zA-Z]+', bug_number):
             fmt = 'More info about this bug: \
 https://bugs.gentoo.org/show_bug.cgi?id={0}' \
-                   .format(bug_number)
+                  .format(bug_number)
         else:
             fmt = 'More info about this bug: \
 https://bugs.gentoo.org/{0}' \
-                   .format(bug_number)
+                  .format(bug_number)
 
         logger.info(fmt)
 
-        info = collections.OrderedDict({
-            'resolution': response['resolution'],
-            'summary': response['summary'],
-            'status': response['status']
-        })
+        bug = Bug(
+            bug_number=bug_number,
+            summary=response['summary'],
+            resolution=response['resolution'],
+            status=response['status']
+        )
 
-        if info['resolution'] == '': info['resolution'] = 'NONE'
+        if bug.resolution == '': bug.resolution = 'NONE'
 
-        for key, value in info.items():
-            key = str(key)
-            if key == 'summary': key = key.capitalize()
-            else: key = key.upper()
-            logger.info('{0}: {1}'.format(key, value))
+        #for key, value in info.items():
+        #    key = str(key)
+        #    if key == 'summary': key = key.capitalize()
+        #    else: key = key.upper()
+        #    logger.info('{0}: {1}'.format(key, value))
 
-        return info
+        return bug
 
-    def update_bugs(self, updates):
-        for bug_number, update in updates.items():
+    def update_bugs(self, list_of_bugs):
+        for bug in list_of_bugs:
+
+            bug_number = bug.bug_number
+            resolution = bug.resolution
+            comment = bug.comment
+            status = bug.status
+
             url = self.resturlmaker.make_bug_url(
-                bug_number=bug_number
+                bug_number=bug.bug_number
             )
 
-            resolution = update.get('resolution')
-            comment = update.get('comment')
-            status = update.get('status')
-
             if not status and not resolution and not comment:
-                logger.info('Nothing to update for bug #{0}.'.format(bug_number))
+                logger.info('Nothing to update for bug #{0}.'
+                            .format(bug_number))
                 break
 
             payload = {
@@ -154,7 +159,7 @@ https://bugs.gentoo.org/{0}' \
                 payload['resolution'] = resolution
                 logger.info('Setting RESOLUTION to {0} ...'.format(resolution))
 
-            if comment != '':
+            if comment and comment != '':
                 logger.info('Posting comment to bug #{0} ...'.format(bug_number))
 
             response = self.send_request('PUT', url, payload)
