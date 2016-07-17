@@ -4,7 +4,7 @@ from docopt import docopt
 """The BaseCommand class is an entry point into the `lzilla' command which
 dispatches keywords to sub commands."""
 
-VERSION = '1.0'
+VERSION = '1.2'
 
 
 class BaseCommand:
