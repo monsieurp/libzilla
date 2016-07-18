@@ -4,8 +4,9 @@ import logging
 import re
 import sys
 
-logging.basicConfig(level=logging.INFO,
-                    format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
 """This module helps create prompts for asking user for information."""
@@ -38,10 +39,8 @@ def prompt_for_credentials(credentials):
         credentials['password'] = getpass.getpass()
         print("OK! Let's recap.")
         for item in credentials.keys():
-            if item == 'url':
-                itm = item.upper()
-            else:
-                itm = item.capitalize()
+            if item == 'url': itm = item.upper()
+            else: itm = item.capitalize()
 
             if item != 'password':
                 to_print = '{0}: {1}'.format(itm, credentials[item])
