@@ -75,6 +75,8 @@ class Connection:
             response = requests.get(**http_request)
         elif request_type == 'PUT':
             response = requests.put(**http_request)
+        elif request_type == 'POST':
+            response = requests.post(**http_request)
         else:
             logger.error('You must specify a request type!')
             sys.exit(1)
@@ -131,7 +133,6 @@ https://bugs.gentoo.org/{0}' \
 
     def update_bugs(self, list_of_bugs):
         for bug in list_of_bugs:
-
             bug_number = bug.bug_number
             resolution = bug.resolution
             comment = bug.comment
@@ -154,14 +155,17 @@ https://bugs.gentoo.org/{0}' \
 
             if status and status != '':
                 payload['status'] = status
-                logger.info('Setting STATUS to {0} ...'.format(status))
+                logger.info('Setting STATUS to {0} ...'
+                            .format(status))
 
             if resolution and resolution != '':
                 payload['resolution'] = resolution
-                logger.info('Setting RESOLUTION to {0} ...'.format(resolution))
+                logger.info('Setting RESOLUTION to {0} ...'
+                            .format(resolution))
 
             if comment and comment != '':
-                logger.info('Posting comment to bug #{0} ...'.format(bug_number))
+                logger.info('Posting comment to bug #{0} ...'
+                            .format(bug_number))
 
             response = self.send_request('PUT', url, payload)
 
