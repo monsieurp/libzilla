@@ -60,14 +60,14 @@ class Connection:
 
         return self.connected
 
-    def send_request(self, request_type='', url=None, payload=None):
-        if payload: payload = json.dumps(payload)
+    def send_request(self, request_type='', url=None, data=None):
+        if data: data = json.dumps(data)
 
         http_request = {
             'headers': {
                 'Content-Type': 'application/json'
             },
-            'data': payload,
+            'data': data,
             'url': url
         }
 
@@ -82,8 +82,9 @@ class Connection:
             sys.exit(1)
 
         if response.status_code != 200:
-            logger.error('Bad request sent to server! HTTP code returned: {0}'
-                         .format(response.status_code))
+            logger.error('HTTP code returned: {0} -> {1}'
+                         .format(response.status_code,
+                                 response.reason))
 
         return response
 
@@ -147,19 +148,19 @@ https://bugs.gentoo.org/{0}' \
                             .format(bug_number))
                 break
 
-            payload = {
+            data = {
                 'ids': bug_number,
                 'token': self.token,
                 'comment': {'body': comment}
             }
 
             if status and status != '':
-                payload['status'] = status
+                data['status'] = status
                 logger.info('Setting STATUS to {0} ...'
                             .format(status))
 
             if resolution and resolution != '':
-                payload['resolution'] = resolution
+                data['resolution'] = resolution
                 logger.info('Setting RESOLUTION to {0} ...'
                             .format(resolution))
 
@@ -167,13 +168,24 @@ https://bugs.gentoo.org/{0}' \
                 logger.info('Posting comment to bug #{0} ...'
                             .format(bug_number))
 
-            response = self.send_request('PUT', url, payload)
+            response = self.send_request('PUT', url, data)
 
-            if not response.ok:
-                logger.error('An error occured whilst updating bug #{0}'
-                             .format(bug_number))
-                logger.error('The HTTP server returned the following error: {0}'
-                             .format(response.reason))
-                sys.exit(1)
+            if not response.ok: sys.exit(1)
 
             logger.info('OK!')
+
+    def file_bug(self, data):
+        url = self.resturlmaker.make_new_bug_url()
+        data['token'] = self.token
+        logger.info('Filing bug ...')
+        response = self.send_request('POST', url, data)
+
+        if not response.ok: sys.exit(1)
+
+        logger.info('OK!')
+
+        bug_id = response.json()['id']
+        logger.info('New bug filed at https://bugs.gentoo.org/{0}'
+                    .format(bug_id))
+
+        return response

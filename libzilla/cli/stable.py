@@ -1,4 +1,6 @@
+from libzilla.promptmaker import prompt
 from portage.xml.metadata import MetaDataXML
+from libzilla.connection import Connection
 import portage
 import sys
 import os
@@ -13,6 +15,16 @@ ERROR_MESSAGES = {
     'keywords': 'Error! No KEYWORDS found in \"{0}\"',
     'ebuild': 'Error! File \"{0}\" is not an ebuild!'
 }
+
+DESCRIPTION = """Arch teams,
+
+Please stabilise:
+{0}
+
+Target arches:
+{1}
+
+Thank you!"""
 
 
 class StableCommand:
@@ -37,11 +49,20 @@ Examples:
 
         self.maintainers = []
         self.arches = []
+        self.cc = []
 
         self.initialise_files(args['<ebuild>'])
         self.look_for_maintainers()
         self.look_for_keywords()
-        self.file_stabilisation_request()
+
+        self.conn = Connection()
+        self.conn.login()
+
+        promptmsg = """Ebuild: {0}
+Arches: {1}
+File stabilisation request? [y/n] """.format(self.ebuild, ', '.join(self.arches))
+        if prompt(promptmsg) == 'y':
+            self.file_stabilisation_request()
 
     def initialise_files(self, ebuild):
         if not os.path.isfile(ebuild):
@@ -71,26 +92,49 @@ Examples:
         # work out ebuild's name
         ebuild = os.path.basename(self.ebuild)
         ebuild = os.path.splitext(ebuild)[0]
-        ebuild = '{0}/{1}'.format(cat, ebuild)
+        self.ebuild = '{0}/{1}'.format(cat, ebuild)
 
         # perform look up
         mysettings = portage.config(local_config=False)
         dbapi = portage.portdbapi(mysettings=mysettings)
         dbapi.porttrees = [dbapi.porttree_root]
-        keywords = dbapi.aux_get(ebuild, ['KEYWORDS'], dbapi.porttree_root)[0]
+        keywords = dbapi.aux_get(self.ebuild, ['KEYWORDS'], dbapi.porttree_root)[0]
 
         if len(keywords) == 0:
             sys.exit(ERROR_MESSAGES['keywords'].format(ebuild))
 
         for arch in keywords.split():
-            # only keep keywords in ~arch
+            # keep keywords in ~arch only
             if '~' in arch:
                 # skip "exotic" arches such as ~amd64-macos and such
                 if '-' in arch: continue
-                self.arches.append(
-                    arch.strip('~') + '@gentoo.org'
-                )
+                arch = arch.strip('~')
+                self.arches.append(arch)
+                self.cc.append(arch + '@gentoo.org')
 
     def file_stabilisation_request(self):
-        print('Maintainers: ' + str(self.maintainers))
-        print('Arches: ' + str(self.arches))
+        assignee = self.maintainers.pop()
+        if len(self.maintainers) > 0:
+            for maintainer in self.maintainers:
+                self.cc.append(maintainer)
+
+        summary = '={0}: stabilisation request'.format(self.ebuild)
+
+        stablereq = {
+            'status': 'CONFIRMED',
+            'summary': summary,
+            'assigned_to': assignee,
+            'version': 'unspecified',
+            'product': 'Gentoo Linux',
+            'severity': 'normal',
+            'component': 'Current packages',
+            'description': DESCRIPTION.format(
+                '=' + self.ebuild,
+                ', '.join(self.arches)
+            ),
+            'priority': 'normal',
+            'cc': self.cc,
+            'keywords': ['STABLEREQ']
+        }
+
+        self.conn.file_bug(stablereq)

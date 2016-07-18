@@ -20,3 +20,8 @@ class RESTURLMaker:
             url=self.url,
             bug_number=bug_number
         )
+
+    def make_new_bug_url(self):
+        return Template('$url/bug').substitute(
+            url=self.url
+        )
