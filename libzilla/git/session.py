@@ -28,7 +28,7 @@ from libzilla.git.toolbox import look_for_bug_numbers
 from libzilla.git.toolbox import trim_spaces
 from libzilla.git.toolbox import run_command
 
-GIT_COMMAND = 'git --no-pager log --decorate --pretty --summary --color=never --stat --format=fuller -1 HEAD'
+GIT_COMMAND = 'git --no-pager log --pretty --summary --color=never --stat --format=fuller -1 HEAD'
 
 CANDIDATES = (
     r'^.*?Fixes bug (\d+).*?$',
