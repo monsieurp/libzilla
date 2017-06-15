@@ -160,7 +160,8 @@ File stabilisation request? [y/n] """.format(self.ebuild, ', '.join(self.arches)
             ),
             'priority': 'normal',
             'cc': self.cc,
-            'keywords': ['STABLEREQ']
+            'keywords': ['STABLEREQ'],
+            'package_list': self.ebuild
         }
 
         self.conn.file_bug(stablereq)
