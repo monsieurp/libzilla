@@ -1,4 +1,4 @@
-################################################################################
+##############################################################################
 #
 # Copyright (c) 2016 Patrice Clement
 #
@@ -11,8 +11,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,9 +22,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-################################################################################
+##############################################################################
 
 import sys
+
 
 ERROR_MESSAGES = {
     'options': 'Both options -s/--status -r/--resolution must be specified!',
@@ -32,6 +33,7 @@ ERROR_MESSAGES = {
     'resolution': 'Error! RESOLUTION \"{0}\" not found in:\n{1}',
     'status': 'Error! STATUS \"{0}\" not found in:\n{1}'
 }
+
 
 RESOLUTIONS = [
     'FIXED',
@@ -45,6 +47,7 @@ RESOLUTIONS = [
     'WORKSFORME',
     'TEST-REQUEST'
 ]
+
 
 STATUSES = [
     'RESOLVED',
@@ -61,7 +64,6 @@ class Bug:
                  comment=None,
                  resolution=None,
                  status=None):
-
         self.bug_number = bug_number
         self.summary = summary
         self.resolution = resolution

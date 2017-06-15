@@ -39,14 +39,14 @@ def prompt_for_credentials(credentials):
         credentials['password'] = getpass.getpass()
         print("OK! Let's recap.")
         for item in credentials.keys():
-            if item == 'url': itm = item.upper()
-            else: itm = item.capitalize()
+            itm = item.capitalize()
+            if item == 'url':
+                itm = item.upper()
 
-            if item != 'password':
-                to_print = '{0}: {1}'.format(itm, credentials[item])
-            else:
+            to_print = '%s: %s' % (itm, credentials[item])
+            if item == 'password':
                 # Don't echo back password
-                to_print = '{0}: {1}'.format(itm, '*' * len(str(credentials[item])))
+                to_print = '%s: %s' % (itm, '*' * len(str(credentials[item])))
             print(to_print)
 
         if prompt('Are these settings correct? [y/n] ') == 'y':

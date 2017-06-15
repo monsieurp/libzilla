@@ -1,4 +1,4 @@
-################################################################################
+##############################################################################
 #
 # Copyright (c) 2016 Patrice Clement
 #
@@ -11,8 +11,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-################################################################################
+##############################################################################
 
 from libzilla.promptmaker import prompt_for_credentials
 from libzilla.promptmaker import prompt
@@ -73,11 +73,14 @@ class ConfigManager(ConfigParser):
         return self.rcfile
 
     def save_rcfile(self):
-        if os.path.exists(DEFAULT_RCFILE): return
+        if os.path.exists(DEFAULT_RCFILE):
+            return
 
         if prompt('Would you like to record these settings in {0}? [y/n] '
                   .format(DEFAULT_RCFILE)) != 'y':
-            logger.info('Keeping settings in memory for the remaining of the session.')
+            info_msg = 'Keeping settings in memory'
+            info_msg += ' for the remaining of the session'
+            logger.info(info_msg)
             return
 
         logger.info('Storing settings in \"{0}\" ...'.format(DEFAULT_RCFILE))

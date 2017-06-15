@@ -1,4 +1,4 @@
-################################################################################
+##############################################################################
 #
 # Copyright (c) 2016 Patrice Clement
 #
@@ -11,8 +11,8 @@
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-################################################################################
+##############################################################################
 
 import requests
 import logging
@@ -52,7 +52,7 @@ class Connection:
         self.resturlmaker = RESTURLMaker(url=self.rcfile['url'])
 
     def __str__(self):
-        return '<{0} <id={1}> <url=\'{2}\'> <connected={3}> <token={4}>>'.format(
+        return '<%s <id=%s> <url=\'%s\'> <connected=%s> <token=%s>>' % (
             self.__class__.__name__,
             id(self),
             self.rcfile['url'],
@@ -61,7 +61,8 @@ class Connection:
         )
 
     def login(self):
-        if self.connected: return self.connected
+        if self.connected:
+            return self.connected
 
         url = self.resturlmaker.make_login_url(
             username=self.rcfile['username'],
@@ -87,7 +88,8 @@ class Connection:
         return self.connected
 
     def send_request(self, request_type='', url=None, data=None):
-        if data: data = json.dumps(data)
+        if data:
+            data = json.dumps(data)
 
         http_request = {
             'headers': {
@@ -147,13 +149,16 @@ https://bugs.gentoo.org/{0}' \
             status=response['status']
         )
 
-        if bug.resolution == '': bug.resolution = 'NONE'
-
+        if bug.resolution == '':
+            bug.resolution = 'NONE'
         for key, value in bug.__dict__.items():
             key = str(key)
-            if key == 'bug_number': key = 'Bug #'
-            if key in ('resolution', 'status'): key = key.upper()
-            else: key = key.capitalize()
+            if key == 'bug_number':
+                key = 'Bug #'
+            if key in ('resolution', 'status'):
+                key = key.upper()
+            else:
+                key = key.capitalize()
             logger.info('{0}: {1}'.format(key, value))
 
         return bug
@@ -196,7 +201,8 @@ https://bugs.gentoo.org/{0}' \
 
             response = self.send_request('PUT', url, data)
 
-            if not response.ok: sys.exit(1)
+            if not response.ok:
+                sys.exit(1)
 
             logger.info('OK!')
 
@@ -206,7 +212,8 @@ https://bugs.gentoo.org/{0}' \
         logger.info('Filing bug ...')
         response = self.send_request('POST', url, data)
 
-        if not response.ok: sys.exit(1)
+        if not response.ok:
+            sys.exit(1)
 
         logger.info('OK!')
 

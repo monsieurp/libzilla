@@ -136,7 +136,7 @@ File stabilisation request? [y/n] """.format(self.ebuild, ', '.join(self.arches)
                 if '-' in arch: continue
                 arch = arch.strip('~')
                 self.arches.append(arch)
-                self.cc.append(arch + '@gentoo.org')
+                self.cc.append('%s@gentoo.org' % (arch))
 
     def file_stabilisation_request(self):
         assignee = self.maintainers.pop()
