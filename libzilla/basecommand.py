@@ -76,17 +76,21 @@ Options:
 See 'lzilla --help' for a complete list of commands.""" % (args['<command>']))
 
     def run_bug_command(self):
+        """Run the `lzilla bug' command."""
         from libzilla.cli.bug import BugCommand
         BugCommand(docopt(BugCommand.__doc__))
 
     def run_git_command(self):
+        """Run the `lzilla git' command."""
         from libzilla.cli.git import GitCommand
         GitCommand(docopt(GitCommand.__doc__))
 
     def run_stable_command(self):
+        """Run the `lzilla stable' command."""
         from libzilla.cli.stable import StableCommand
         StableCommand(docopt(StableCommand.__doc__))
 
     def run_shell_command(self):
+        """Run the `lzilla shell' command."""
         from libzilla.cli.shell import ShellCommand
         ShellCommand(docopt(ShellCommand.__doc__)).cmdloop()
