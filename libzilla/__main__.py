@@ -27,11 +27,8 @@
 ##############################################################################
 
 import libzilla.basecommand
-
-
-def main():
-    libzilla.basecommand.BaseCommand()
+import sys
 
 
 if __name__ == '__main__':
-    main()
+    sys.exit(libzilla.basecommand.BaseCommand())
