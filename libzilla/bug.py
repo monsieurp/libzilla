@@ -58,12 +58,14 @@ STATUSES = [
 
 
 class Bug:
+    """The Bug class represents a Bugzilla bug report."""
     def __init__(self,
                  bug_number,
                  summary=None,
                  comment=None,
                  resolution=None,
                  status=None):
+        """Instanciates a bug report."""
         self.bug_number = bug_number
         self.summary = summary
         self.resolution = resolution
@@ -71,6 +73,7 @@ class Bug:
         self.comment = comment
 
     def __str__(self):
+        """String representation of a bug report."""
         return """Bug #: %s
 Summary: %s
 RESOLUTION: %s
