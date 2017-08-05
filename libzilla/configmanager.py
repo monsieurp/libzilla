@@ -28,32 +28,37 @@ from libzilla.promptmaker import prompt_for_credentials
 from libzilla.promptmaker import prompt
 from configparser import ConfigParser
 
+
 import libzilla.validator as validator
 import collections
 import logging
 import os
+
 
 DEFAULT_RCFILE = os.path.expanduser('~/.libzillarc')
 DEFAULT_TOKENFILE = os.path.expanduser('~/.libzillatoken')
 DEFAULT_SECTION = 'gentoo'
 KEYS_IN_RCFILE = 'url username password'.split()
 
+
 logging.basicConfig(
     level=logging.INFO,
     format='[%(asctime)s][%(name)s][%(levelname)s]: %(message)s')
 logger = logging.getLogger(__name__)
 
-"""The ConfigManager class reads and helps create a ~/.libzillarc file to
-figure out the user's credentials in order to log into Bugzilla."""
-
 
 class ConfigManager(ConfigParser):
+    """The ConfigManager is a wrapper around the ~/.libzillarc file.
+    This class contains functions to read the aforementioned file, work
+    out the user's credentials and more."""
     def __init__(self):
+        """Instanciate a ConfigManager object."""
         super().__init__(default_section=DEFAULT_SECTION)
         self.read([DEFAULT_RCFILE])
         self.rcfile = {}
 
     def __str__(self):
+        """Return a string representation of a ConfigManager instance."""
         return '<{0} <id={1}> <rcfile={2}>>'.format(
             self.__class__.__name__,
             id(self),
@@ -61,6 +66,7 @@ class ConfigManager(ConfigParser):
         )
 
     def obtain_credentials(self):
+        """Get the user's credentials from the rcfile."""
         if not os.path.exists(DEFAULT_RCFILE):
             logger.info('File \"{0}\" not found! Prompt user for credentials.'
                         .format(DEFAULT_RCFILE))
@@ -73,6 +79,7 @@ class ConfigManager(ConfigParser):
         return self.rcfile
 
     def save_rcfile(self):
+        """Write out the rcfile content to disk."""
         if os.path.exists(DEFAULT_RCFILE):
             return
 
@@ -94,6 +101,7 @@ class ConfigManager(ConfigParser):
         logger.info('Settings successfully recorded!')
 
     def walk_rcfile(self):
+        """Walk the rcfile content and retrieve information."""
         for item in self.items(DEFAULT_SECTION):
             k, v = item
             self.rcfile[k] = v
