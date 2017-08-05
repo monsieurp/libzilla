@@ -34,7 +34,7 @@ from libzilla.bug import Bug
 
 
 class BugCommand:
-    """lzilla bug: Query or alter one or more bug number(s).
+    """lzilla bug: Query or alter one or more bug report(s).
 
 Usage:
   lzilla bug <bug_number> ...
