@@ -31,10 +31,7 @@ from libzilla.git.toolbox import run_command
 GIT_COMMAND = 'git --no-pager log --pretty --summary --color=never --stat --format=fuller -1 HEAD'
 
 CANDIDATES = (
-    r'^.*?Fixes bug (\d+).*?$',
-    r'^.*?Fixes security bug (\d+).*?$',
-    r'^\s+Gentoo-Bug:(\s+\d+)$',
-    r'^\s+Gentoo-Bug:\s?https://bugs.gentoo.org/(\d+)'
+    r'^\s+Bug:\s?https://bugs.gentoo.org/(\d+)'
 )
 
 """A GitSession represents a `git' command run."""
