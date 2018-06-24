@@ -32,7 +32,7 @@ from docopt import docopt
 dispatches keywords to subcommands."""
 
 
-VERSION = '1.2'
+VERSION = '1.5'
 
 
 class BaseCommand:
