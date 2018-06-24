@@ -30,5 +30,9 @@ import libzilla.basecommand
 import sys
 
 
+def main():
+    return libzilla.basecommand.BaseCommand()
+
+
 if __name__ == '__main__':
-    sys.exit(libzilla.basecommand.BaseCommand())
+    sys.exit(main())
